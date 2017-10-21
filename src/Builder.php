@@ -16,6 +16,11 @@ class Builder
     private $name;
 
     /**
+     * @var string
+     */
+    private $element;
+
+    /**
      * @var array
      */
     private $defaults = [
@@ -29,10 +34,17 @@ class Builder
      *
      * @return $this|Builder
      */
-    public function name($name)
+    public function name($name = null)
     {
+        if (empty($name)) {
+            $name = str_random();
+            $this->element = 'select';
+        } else {
+            $this->element = $name;
+        }
         $this->name = $name;
         $this->select2[$name] = $this->defaults;
+        $this->element($this->element);
         return $this;
     }
 
@@ -109,12 +121,9 @@ class Builder
      */
     public function render()
     {
-        if (empty($this->name)) {
-            $this->name('select');
-        }
         $select2 = $this->select2[$this->name];
         return view('select2-template::select2-template')
-                ->with('element', $this->name)
+                ->with('element', $select2['element'])
                 ->with('placeholder', $select2['placeholder'])
                 ->with('options', isset($select2['options']) ? $select2['options'] : '')
                 ->with('optionsRaw', isset($select2['optionsRaw']) ? $select2['optionsRaw'] : '')

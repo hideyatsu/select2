@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    var element = "{{ $element ?: 'select' }}";
+    var element = "{{ $element }}";
     $(element).select2({
       ajax: {
         url: "https://api.github.com/search/repositories",
